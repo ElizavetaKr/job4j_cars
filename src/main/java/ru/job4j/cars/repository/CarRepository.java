@@ -5,6 +5,7 @@ import ru.job4j.cars.model.Car;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @AllArgsConstructor
 public class CarRepository {
@@ -15,8 +16,8 @@ public class CarRepository {
         return crudRepository.query(query, Car.class);
     }
 
-    public List<Car> findById(int carId) {
+    public Optional<Car> findById(int carId) {
         String query = "from Car o WHERE o.id = :fId";
-        return crudRepository.query(query, Map.of("fId", carId), Car.class);
+        return crudRepository.optional(query, Map.of("fId", carId), Car.class);
     }
 }
