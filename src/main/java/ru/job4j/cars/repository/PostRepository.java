@@ -37,18 +37,18 @@ public class PostRepository {
         return crudRepository.optional(query, Map.of("fId", postId), Post.class);
     }
 
-    public List<Post> findAllForTheLastDay(LocalDateTime time) {
-        String query = "from Post p WHERE p.created BETWEEN :start AND :end";
-        return crudRepository.query(query, Map.of("start", time.minusDays(1), "end", time), Post.class);
+    public List<Post> findAllForTheLastDay() {
+        String query = "from Post p WHERE p.created > :data";
+        return crudRepository.query(query, Map.of("data", LocalDateTime.now().minusDays(1)), Post.class);
     }
 
     public Optional<Post> findByName(String carName) {
-        String query = "from Post p WHERE p.car_id = (Select c.id from Car c WHERE c.name = :fName)";
+        String query = "from Post p JOIN Car c ON p.car_id = c.id WHERE c.name = :fName)";
         return crudRepository.optional(query, Map.of("fName", carName), Post.class);
     }
 
     public List<Post> findAllWithPhoto() {
-        String query = "from Post p WHERE p.photo_id IS NOT NULL";
+        String query = "from Post p WHERE size(p.photo) > 0";
         return crudRepository.query(query, Post.class);
     }
 }
